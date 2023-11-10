@@ -1,0 +1,24 @@
+22:21:04 **** Incremental Build of configuration Debug for project DC_monitoring_BLE ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32WB15xx -c -I../Core/Inc -I../Drivers/STM32WBxx_HAL_Driver/Inc -I../Drivers/STM32WBxx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32WBxx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:158:12: warning: format '%d' expects argument of type 'int', but argument 2 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  158 |   printf("%d\n\r",angle_cnt);
+      |           ~^      ~~~~~~~~~
+      |            |      |
+      |            int    uint32_t {aka long unsigned int}
+      |           %ld
+arm-none-eabi-g++ -o "DC_monitoring_BLE.elf" @"objects.list"   -mcpu=cortex-m4 -T"/home/caio/Desktop/UFSC_20232/DC_monitoring/DC_motor_monitoring/DC_monitoring_BLE/STM32WB15CCUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="DC_monitoring_BLE.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: DC_monitoring_BLE.elf
+ 
+arm-none-eabi-size   DC_monitoring_BLE.elf 
+arm-none-eabi-objdump -h -S  DC_monitoring_BLE.elf  > "DC_monitoring_BLE.list"
+   text	   data	    bss	    dec	    hex	filename
+  30116	    120	   2160	  32396	   7e8c	DC_monitoring_BLE.elf
+Finished building: default.size.stdout
+ 
+Finished building: DC_monitoring_BLE.list
+ 
+
+22:21:05 Build Finished. 0 errors, 1 warnings. (took 904ms)
+
