@@ -1,0 +1,19 @@
+2023-11-15 11:16:24,237 [INFO] Activator:176 - 
+
+
+2023-11-15 11:16:24,241 [INFO] Activator:177 - !SESSION log4j initialized
+2023-11-15 11:16:28,948 [INFO] LogOutputStream:77 - [STDOUT_REDIRECT] 
+2023-11-15 11:16:54,829 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+2023-11-15 11:16:54,829 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] SLF4J: Defaulting to no-operation (NOP) logger implementation
+2023-11-15 11:16:54,829 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+2023-11-15 14:04:39,290 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] SWT SessionManagerDBus: Failed to UnregisterClient: GDBus.Error:org.freedesktop.DBus.Error.NoReply: Message recipient disconnected from message bus without replying
+2023-11-15 14:04:39,466 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] SWT SessionManagerDBus: Failed to connect to org.gnome.SessionManager: Error calling StartServiceByName for org.gnome.SessionManager: The connection is closed
+2023-11-15 14:04:39,467 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] SWT SessionManagerDBus: Failed to connect to org.xfce.SessionManager: Error calling StartServiceByName for org.xfce.SessionManager: The connection is closed
+2023-11-15 14:49:35,213 [INFO] Activator:176 - 
+
+
+2023-11-15 14:49:35,216 [INFO] Activator:177 - !SESSION log4j initialized
+2023-11-15 14:49:40,274 [INFO] LogOutputStream:77 - [STDOUT_REDIRECT] 
+2023-11-15 14:50:02,979 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+2023-11-15 14:50:02,980 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] SLF4J: Defaulting to no-operation (NOP) logger implementation
+2023-11-15 14:50:02,980 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
