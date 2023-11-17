@@ -31,7 +31,7 @@ int main()
     Current_Sensor Current(1,A0);
     Velocimetro RPM(2);
     Comunicator COM(CONSOLE_TX,CONSOLE_RX,115200);
-
+    Motor DC(3);
     HAL_Init();
     MX_GPIO_Init();
     //MX_DMA_Init();
@@ -49,23 +49,33 @@ int main()
     HAL_TIM_Base_Start(&htim2);
 
     //BufferedSerial serial_debug(CONSOLE_TX, CONSOLE_RX,115200);
-    //BufferedSerial serial_CPU(PC_12,PD_2,4800);
 
     //SerialStream<BufferedSerial> debug_Stream(serial_debug);
     //debug_Stream.printf("Hello World From MBED- OS\n");
 
+    DC.setCycle(50);
+    DC.ApplyCycle();
+
     while (true) {
-        ThisThread::sleep_for(500ms);
+        ThisThread::sleep_for(100ms);
         Current.comunicacao();
         RPM.comunicacao();
+        
 
+        if (DC.getCycle()<100){
+            DC.setCycle(DC.getCycle()+1);
+        }
+        else DC.setCycle(0);
+
+        DC.ApplyCycle();
         COM.setVal((int)Current.getVal(),0);
         COM.setVal((int)RPM.getVal(),1);
         COM.setVal((int)35,2);
         COM.setVal((int)32,3);
 
         COM.SendData();
-        //debug_Stream.printf("Corrente: %d , %d   RPM: %d , %d  %d\n",(int)Current.getVal(),Current.getRaw(),(int)(RPM.getVal()*100),RPM.getRaw(),RPM.getRawPrev());
+
+        //debug_Stream.printf("Corrente: %d , %d   RPM: %d , %d  %d    PWM : %d\n",(int)Current.getVal(),Current.getRaw(),(int)(RPM.getVal()*100),RPM.getRaw(),RPM.getRawPrev(),DC.getCycle());
     }
 }
 

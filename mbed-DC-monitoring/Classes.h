@@ -71,7 +71,7 @@ class Comunicator{
         bool _modo;//PC ou Celular
         bool _adminON;
         int _vals[4];//Corrente Velocimetro Aceletrometro ID_de quem ativou
-        uint16_t _valsSend[4];
+        char _valsSend[4];
         int _bufferCorrente[10];
         int _bufferVeloci[10];
         int _bufferAceler[10];
