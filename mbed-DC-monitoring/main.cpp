@@ -48,11 +48,6 @@ int main()
 
     HAL_TIM_Base_Start(&htim2);
 
-    //BufferedSerial serial_debug(CONSOLE_TX, CONSOLE_RX,115200);
-
-    //SerialStream<BufferedSerial> debug_Stream(serial_debug);
-    //debug_Stream.printf("Hello World From MBED- OS\n");
-
 
     DC.setCycle(100);
     DC.ApplyCycle();

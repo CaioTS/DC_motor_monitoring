@@ -1,4 +1,0 @@
-main.c:62:5:int main()	1
-main.c:103:6:void SystemClock_Config()	3
-main.c:148:6:void Error_Handler()	1
-mainCpp.cpp:7:6:void mainCpp()	1
