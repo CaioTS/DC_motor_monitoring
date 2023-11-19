@@ -84,7 +84,8 @@ class Comunicator{
         Comunicator(PinName Tx, PinName Rx, int baud_rate);
         void ReceiveData();
         void SendData(char *);
-
+        void SendVals();
+        void TransmitArray(std::array<char, 3>);
         int getModo(){return _modo;}
         void setModo(bool modo){_modo = modo;}
 
