@@ -12,6 +12,8 @@
 #include "HAL_Interrupts.h"
 #include "SerialStream.h"
 
+#include <array>
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -57,5 +59,5 @@ extern UART_HandleTypeDef huart1;
 
 extern int angle_cnt;
 
-void Recepcao_CPU();
+
 #endif /* __MAIN_H */

@@ -78,12 +78,26 @@ void Comunicator::ReceiveData(){
 
 void Comunicator::SendData(char * val){
      
-    for (int i = 0;i<4;i++){
-        _valsSend[i] = (char)_vals[i];
-    }
     serial_debug.write(val,sizeof(val));
 }
 
+void Comunicator::SendVals(){
+
+    for (int i = 0;i<4;i++){
+        _valsSend[i] = (char)_vals[i];
+    }
+
+    if (!getModo())serial_debug.write(_valsSend,sizeof(_valsSend));
+}
+
+
+void Comunicator:: TransmitArray(std::array<char, 3> vetor) {
+    char aux[4] = {0};
+    for (int i =0 ; i<4 ;i++){
+        aux[i] = vetor[i];
+    }
+    if(!getModo())serial_debug.write(aux,sizeof(aux));
+}
 void Comunicator::UpdateBuffers(){
     if (!getAdminOn()){
     for (int i = 1;i<10;i++){
