@@ -57,5 +57,5 @@ extern UART_HandleTypeDef huart1;
 
 extern int angle_cnt;
 
-
+void Recepcao_CPU();
 #endif /* __MAIN_H */

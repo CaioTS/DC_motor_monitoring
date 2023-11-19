@@ -68,20 +68,22 @@ class Motor{
 };
 class Comunicator{
     private:
-        bool _modo;//PC ou Celular
+        bool _modo;//PC ou Celular  0 PC 1 Celular
         bool _adminON;
+        int _PWMReceived;
         int _vals[4];//Corrente Velocimetro Aceletrometro ID_de quem ativou
         char _valsSend[4];
         int _bufferCorrente[10];
         int _bufferVeloci[10];
         int _bufferAceler[10];
-
+        int _received;//Indica qual a nova atuallzação de comando
+        bool _rvalid; //Dado da CPU valido
         BufferedSerial serial_debug;
     public:
 
         Comunicator(PinName Tx, PinName Rx, int baud_rate);
         void ReceiveData();
-        void SendData();
+        void SendData(char *);
 
         int getModo(){return _modo;}
         void setModo(bool modo){_modo = modo;}
@@ -89,9 +91,14 @@ class Comunicator{
         bool getAdminOn(){return _adminON;}
         void setAdminOn(bool adminON){_adminON = adminON;}
         
+        int getPWM(){return _PWMReceived;}
+        void setPWM(int PWM){_PWMReceived = PWM;}
+
         int getVal(int index){return _vals[index];}
         void setVal(int val,int index){_vals[index] = val;}
 
+        int getReceived(){return _received;}
+        void setReceived(int received){_received = received;}
 
         int getCorrente(int index){return _bufferCorrente[index];}
         void setCorrente(int val,int index){_bufferCorrente[index] = val;}
@@ -103,5 +110,7 @@ class Comunicator{
         int getAceler(int index){return _bufferAceler[index];}
         void setAceler(int val,int index){_bufferAceler[index] = val;}
         
+        bool getRvalid(){return _rvalid;}
+        void setRvalid(bool rvalid){_rvalid = rvalid;}
         void UpdateBuffers();
 };
