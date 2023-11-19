@@ -38,13 +38,50 @@ void Velocimetro::update(){
 
 Comunicator::Comunicator(PinName Tx, PinName Rx, int baud_rate):serial_debug(Tx,Rx,baud_rate){}
 
-void Comunicator::ReceiveData(){}
+void Comunicator::ReceiveData(){
+    char buf[4] = {0};
+    char aux[1] = {0};
+    if (char num = serial_debug.read(buf, sizeof(buf))){
+        setReceived(0);//Recebeu dados novos
+        setRvalid(true);
+        //serial_debug.write(buf,sizeof(buf));
+        //SendData(buf);
+        switch (buf[0]){
+            case 'A': //Ativa modo Admin 41
+                SendData("Admin Conectado");
+                setAdminOn(true);
+            break;
+            case 'D':// Desativa modo Admin 44
+                SendData("Admin Desconectado");
+                setAdminOn(false);
+            break;
+            case 'P'://modo para PC 50
+                SendData("Modo PC");
+                setModo(false);
+            break;
+            case 'C'://Modo para Celular 43
+                SendData("Modo Celular");
+                setModo(true);
+            break;
+            case 'M':// Altera PWM 4D
+                SendData("Alterando PWM");
+                setReceived(5);
+                setPWM((int)(buf[1] - '0')*100 + (int)(buf[2] - '0')*10 + (int)(buf[3] - '0'));
+                if (getPWM() > 100 or getPWM() < 0){setRvalid(false);}
+            default:
+                setRvalid(false);//Dado Inválido
+            break;
+        }
 
-void Comunicator::SendData(){
+    }
+}
+
+void Comunicator::SendData(char * val){
+     
     for (int i = 0;i<4;i++){
         _valsSend[i] = (char)_vals[i];
     }
-    serial_debug.write(_valsSend,4);
+    serial_debug.write(val,sizeof(val));
 }
 
 void Comunicator::UpdateBuffers(){
