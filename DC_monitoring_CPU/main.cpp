@@ -35,19 +35,19 @@ public:
         }
         return filtered_entries; //Retorna Vector com os eventos do intervalo de tempo
     }
-     //Função que verifica quanto tempo o atuador ficou ligado
+     //Função que verifica quanto tempo o cotnrolador ficou ligado
      int totalActiveTimeInDateRange(const  string& start_date, const  string& end_date) { 
         int total_minutes = 0;
         int maquina_estado = 0;
         int ano,mes,dia,hora,min,seg;
         int nano,nmes,ndia,nhora,nmin;
         int dano =0,dmes =0,ddia =0,dhora =0,dmin =0;
-        string last_event = "S"; //Inicia com ultimo Evento em S de start, para caso no inicio da faixa de tempo o atuador já estivesse ligado
+        string last_event = "S"; //Inicia com ultimo Evento em S de start, para caso no inicio da faixa de tempo o controlador já estivesse ligado
         sscanf(start_date.c_str(), "%d-%d-%d %d:%d",&ano,&mes, &dia, &hora, &min); //Converte a string dos dados em variáveis inteiras
 
         for (const auto& entry : log_entries) { //Laço for que passa por todos os eventos da log_entries
             if (entry.timestamp >= start_date && entry.timestamp <= end_date) { //Limita para os eventos dentro da faixa de tempo
-                //O mic vai mandar "I" e o horário que ativou o atuador e F e o horário que desligou,
+                //O mic vai mandar "I" e o horário que ativou o controlador e F e o horário que desligou,
                 //Se ler um F antes de um I, é porque já estava ligado desde o início do start_date,
                 //Mesma coisa serve para caso acabe com um I
                     if (entry.event_type == "I" && (last_event == "F" || last_event == "S" )) {
@@ -71,7 +71,7 @@ public:
         }
          if (last_event == "I"){ 
             // Se percorreu todo o intervalo de tempo e o ultimo evento foi uma atuação, 
-            //devemos considerar que até o fim do intervalo de tempo analisado, o atuador permaneceu ativado
+            //devemos considerar que até o fim do intervalo de tempo analisado, o controlador permaneceu ativado
                 sscanf(end_date.c_str(), "%d-%d-%d %d:%d",&nano,&nmes, &ndia, &nhora, &nmin);//Adquire dados de fim do intervalo como sendo fim da atuação
                 dano += nano - ano;
                 dmes += nmes - mes;
@@ -185,7 +185,7 @@ int main() {
         }
     }
 
-    else if (interaction == 'A'){//Calcular tempo ativo do atuador
+    else if (interaction == 'A'){//Calcular tempo ativo do controlador
          cin.ignore(); //Limpa cin
             string tempo_init;
             string tempo_final;
