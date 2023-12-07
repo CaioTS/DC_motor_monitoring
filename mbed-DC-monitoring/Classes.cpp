@@ -68,6 +68,7 @@ void Comunicator::ReceiveData(){
                 setReceived(5);
                 setPWM((int)(buf[1] - '0')*100 + (int)(buf[2] - '0')*10 + (int)(buf[3] - '0'));
                 if (getPWM() > 100 or getPWM() < 0){setRvalid(false);}
+                SendData(buf);
                 break;
             case 'S'://53 - Mande o Dado
                 maquina_estado = 2;
@@ -79,7 +80,7 @@ void Comunicator::ReceiveData(){
                 maquina_estado = 3;
                 break;
             default:
-                setRvalid(false);//Dado Inválido
+            //setRvalid(false);//Dado Inválido
             break;
         }
 

@@ -41,7 +41,7 @@ vector <char>* Dados_Send; // Variável que interage com FILA
 Thread Clock_Thread(osPriorityNormal, 100, nullptr, nullptr); //Thread que conta os segundos
 Thread RecepcaoCPU(osPriorityNormal,500,nullptr,nullptr); // Threas que cuida da Recepção Serial com a COU
 
-ClockCalendar Relogio(12,6,2023,4,14,30,1);//ClockCalenadr desenvolvido em aula inicializando com a data 
+ClockCalendar Relogio(12,6,2023,9,40,10,1);//ClockCalenadr desenvolvido em aula inicializando com a data 
 Current_Sensor Current(1,A0);//Sensor de Corrente no pino A0 ID 1
 Velocimetro RPM(2);//Velocimetro com ID 2
 
@@ -144,7 +144,7 @@ int main()
     HAL_TIM_Base_Start(&htim2);
 
     //Começa ciclo do pwm no máximo
-    DC.setCycle(100);
+    DC.setCycle(30);
     DC.ApplyCycle();
 
     vector <char> string_format;//string que é armazenada na lista
@@ -186,6 +186,14 @@ int main()
 
             }
 
+            if ((COM.getReceived()== 5)){ //Se dado for válido, e foi refente ao PWM, altera o valor do PWM
+                    COM.setReceived(0);
+                    DC.setCycle(COM.getPWM());
+                    DC.ApplyCycle(); //Aplica o valor do PWM
+                    led3 = 1;
+
+                } 
+
         }
 
             if (aux_init){
@@ -214,6 +222,7 @@ int main()
                 Fila.try_put(&string_format);
                 led3 = 1; //Acende led para avisar evento
                 string_format.clear();//limpa vetor de char
+                ThisThread::sleep_for(100ms);
             }
             else if (Current.getVal() <=1.5){aux_C = true; led3 = 0;ThisThread::sleep_for(100ms);}//Voltou a normalidade, fica habil a detectar eventos
             if (RPM.getVal() < 10 and Current.getVal() > 0.2 and aux_V ){// Anomalia: RPM muito baixo e corrente em nível OK, Sugere muito peso no motor
@@ -232,11 +241,6 @@ int main()
 
             }
             else if (RPM.getVal()> 10){aux_V = true;ThisThread::sleep_for(100ms);}//Voltou a normalidade, fica habil a detectar eventos
-            if (COM.getRvalid() and (COM.getReceived()== 5)){ //Se dado for válido, e foi refente ao PWM, altera o valor do PWM
-                    DC.setCycle(COM.getPWM());
-                    DC.ApplyCycle(); //Aplica o valor do PWM
-
-                } 
         
         
     }

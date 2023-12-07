@@ -138,7 +138,7 @@ void Recebe_Dado(){
             
             //Adiciona dados de log
             logController.addLogEntry(buf_time,buf_event,buf_intensity);
-            //std:: cout << buf<<endl;
+            std:: cout << buf<<endl;
 
         }
     }
@@ -242,23 +242,25 @@ int main() {
     else if (interaction == 'P'){ // Ajustar PWM mandando valor de 0 100 pela serial
         string PWM_val;
         string PWM_send = "M";//Valor para que o micocontrolador indica 
+        char buf[4] = {0};
         //que é para alterar o microncontrolador
         cout << "Duty Cycle do PWM desejado (000 a 100): ";
         cin >> PWM_val;
         PWM_send.append(PWM_val);
-        /*if (write(serial_fd, &PWM_send, 4) != 4) {
+        const char* charBuffer = PWM_send.c_str();
+
+        if (write(serial_fd, charBuffer, 4) != 4) {
             cerr << "Error writing to serial port" <<  endl;
             close(serial_fd);
             return 1;
         }
         else{
             cout << "String Transmitida: " << PWM_send << endl;
-            char buf_pwm[5];
+            char buf_pwm[15];
             int ret;
             cout << "PWM Atualizado com sucesso"<< endl;
-            ret = read(serial_fd,buf_pwm,sizeof(buf_pwm));
-            cout << "Valor Lido: " << buf_pwm << ret;
-        }*/
+            this_thread::sleep_for(500ms);
+        }
     } 
     cout << "Fazer mais Alguma coisa? (S)im (N)ao"<<endl;
     cin >> interaction;
