@@ -86,67 +86,14 @@ return filtered_entries; //Retorna Vector com os eventos do intervalo de tempo
     }
 };
 
-    LogController logController; //Classe que armazena FILA e faz as pesquisas nos intervalos de tempo
-    int serial_fd; //Interface Serial
-    bool finish = false; // Se o admin deseja encerrar o monitoramento
 
-void Recebe_Dado(){
-        //Adiciona todos os dados no vector do LogController
-    
-    std::cout << "Iniciou Thread";
-    char buf_time[17];//timestamp
-    char buf_event[2];//Event
-    char buf_intensity[4];//Intensity
-    char serial[1] = {0};//Armzanena cada byte enviado
-    char buf[23] = {0};//Buf que será armazenado nos Logs
-    int bytesRead;
-    char aux[1] = {'S'};//Autoriza mic a mandar o evento
-    char aux2[1] = {'B'};//Evento recebido corretamente
-    char aux3[1] = {'W'};//Evento recebido incorretamente
-    int maquina_estado = 0;
-    while(!finish){
-        
-        if (maquina_estado == 0){//Espera receber 'O'
-            read(serial_fd,&serial,1);
-            if (serial[0] == 'O'){maquina_estado = 1;write(serial_fd,aux,1);}
-            else maquina_estado = 0;
-        }
-        else if (maquina_estado == 1){//Le 22 bytes para montar string
-        for (int i = 0; i<22;i++){
-        bytesRead = read(serial_fd, &serial, 1);
-        buf[i] = serial[0];
-        }
-        buf[22] = '\0';
-        // Se buf[10] não for um espaço, evento foi enviado incorretamente
-        if (buf[10] == ' '){write(serial_fd,aux2,1);maquina_estado = 2;}//Dado ok
-        else {write(serial_fd,aux3,1);maquina_estado = 1;}//Dado não Ok
-        }
-
-        else if (maquina_estado == 2){ //Converte buf nas 3 strings para o log
-            //os 16 primeiros bytes são sobre o tempo
-            for (int i = 0; i<16;i++){buf_time[i] = buf[i];}
-            buf_time[16] = '\0';
-
-            //O byte 18 é o tipo de evento
-            buf_event[0] = buf[17];
-            buf_event[1] = '\0';
-
-            //do byte 20 a 22 se refere a intesidade do evento
-            for (int i = 0; i<3;i++){buf_intensity[i] = buf[i+19];}
-            buf_intensity[3] = '\0';
-            maquina_estado = 0;
-            
-            //Adiciona dados de log
-            logController.addLogEntry(buf_time,buf_event,buf_intensity);
-            //std:: cout << buf<<endl;
-
-        }
-    }
-}
 
 
 int main() {
+    LogController logController; //Classe que armazena FILA e faz as pesquisas nos intervalos de tempo
+    bool finish = false; // Se o admin deseja encerrar o monitoramento
     char interaction;//Armazena variável dos cins
+    int serial_fd; //Interface Serial (NÃO UTILIZADA)
     cout << "Inicio de Interface com o Microncontrolador"<<endl;
     
     cout << "Deseja Monitorar Motor? (S) ou (N)" <<endl;
@@ -154,7 +101,7 @@ int main() {
     
     if (interaction == 'S'){ //Inicia Monitoramento
 
-        const char* serialPort = "/dev/ttyACM1"; //Porta Serial do Microncontrolador
+    /*    const char* serialPort = "/dev/ttyACM0"; //Porta Serial do Microncontrolador
         cout << "Estabelecendo Comunicacao Serial" << endl;
         serial_fd = open(serialPort, O_RDWR); //Abre para read e write a porta serial
         if (serial_fd == -1) {
@@ -170,9 +117,9 @@ int main() {
             return 1;
         }
 
-        //Baud Rate para 115200
-        cfsetispeed(&tty, B115200);
-        cfsetospeed(&tty, B115200);
+        //Baud Rate para 9600
+        cfsetispeed(&tty, B9600);
+        cfsetospeed(&tty, B9600);
         
         // Bits de Daddos (8 bits)
         tty.c_cflag &= ~CSIZE;
@@ -188,7 +135,7 @@ int main() {
             std::cerr << "Error setting serial port attributes" << std::endl;
             return 1;
         }
-    
+    */
     vector<string> dados_sinteticos; //Criação dos dados sintéticos para teste
     dados_sinteticos.push_back("2023-01-01 12:00-F-XXX");
     dados_sinteticos.push_back("2023-01-01 18:00-I-XXX");
@@ -196,12 +143,26 @@ int main() {
     dados_sinteticos.push_back("2023-01-01 19:00-A-098");
     dados_sinteticos.push_back("2023-01-01 19:45-F-XXX");
 
+    char buf_time[17];//timestamp
+    char buf_event[2];//Event
+    char buf_intensity[4];//Intensity
 
-    write(serial_fd,"AXXX",5);
+    //Adiciona todos os dados no vector do LogController
+    //while(read(serial_fd,buf,sizeof(buf))){
+    for (const std::string& buf : dados_sinteticos) 
+    {  
+        buf.copy(buf_time,16,0);
+        buf_time[16] = '\0';
         
-    thread Recebe_log(Recebe_Dado);
+        buf.copy(buf_event,1,17);
+        buf_event[1] = '\0';
 
-    cout << "Letura de Filas Ativada"<<endl;
+        buf.copy(buf_intensity,3,19);
+        buf_intensity[3] = '\0';
+
+        logController.addLogEntry(buf_time,buf_event,buf_intensity);
+    }
+    cout << "Letura de Filas Completa"<<endl;
     while(!finish){ //Enquanto o admin não cancela o monitoramento, ele repete a interface com o admin.
     cout << "Proxima Execucao: Verificar Logs(L), Ajustar PWM(P) ou Verificar Tempo Ativado(A)"<<endl;
     cin >> interaction;
@@ -264,11 +225,8 @@ int main() {
     cin >> interaction;
     if (interaction == 'N'){
         finish = true;//Encerra Programa
-        write(serial_fd,"DXXX",5);
-        Recebe_log.join();
-
     }
     }
-}
+    }
     return 0;
 }
