@@ -85,7 +85,7 @@ class Comunicator{
         void ReceiveData();
         void SendData(char *);
         void SendVals();
-        void TransmitArray(std::array<char, 3>);
+        void TransmitArray(vector <char> &);
         int getModo(){return _modo;}
         void setModo(bool modo){_modo = modo;}
 
